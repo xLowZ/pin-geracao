@@ -7,10 +7,10 @@ import analise_solar
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 def executar_todos_os_modulos():
-    print("Executando Módulo 1...")
+    print("Análise Consumo...\n")
     analise_consumo.main()
 
-    print("Executando Módulo 2...")
+    print("\nAnálise Solar...\n")
     analise_solar.main()
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -19,3 +19,4 @@ def executar_todos_os_modulos():
 
 if __name__ == "__main__":
     executar_todos_os_modulos()
+    input() # Para o terminal não fechar diretamente
