@@ -101,10 +101,8 @@ def main():
     salvar_em_json({"Dados_Consumo_Bruto": dados_consumo}, caminho_arquivo_json)
 
     # Exibir resultados ou realizar outras ações (opcional)
-    # print(f"Média Mensal: {media_mensal}")
-    # print(f"Consumo Diário Médio: {consumo_diario_medio}")
-    # print(f"Nova Média Arredondada: {nova_media}")
-    # print(f"Novo Consumo Arredondado: {novo_consumo}")
+    print(f"Média Mensal: {nova_media}")
+    print(f"Consumo Diário Médio: {novo_consumo}")
 
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
