@@ -3,27 +3,10 @@
 """
 
 import os
-import json
 from math import ceil
 import numpy as np
-
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# ================== Variáveis Globais e Constantes =========================
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-# Potência e preço por unidade dos painéis (kW e R$)
-PAINEIS_SOLARES = np.array([[0.330, 579.00], 
-                            [0.280, 519.00], 
-                            [0.460, 749.00],
-                            [0.280, 464.07]])
-
-# Lista que será preenchida posteriormente
-precos = []
-
-NOMES_PAINEIS = ['ODA330_36_P',
-                 'OSDA_ODA280_30_P',
-                 'SUNOVA_SS_460_60_MDH',
-                 'TRESUN_RS6C_280P']
+import pandas as pd
+import json
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Configurações =================================
@@ -32,11 +15,51 @@ NOMES_PAINEIS = ['ODA330_36_P',
 # Obtém o caminho absoluto para o diretório do script
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Potência e preço por unidade dos painéis (kW e R$)
+df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
+
 caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+with open(caminho_arquivo_json, 'r') as file:
+    config = json.load(file)
+
+# Obter o valor de "padrao_alimentacao" do JSON
+padrao = config.get('padrao_alimentacao')
+
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# ================== Variáveis Globais e Constantes =========================
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+# Lista que será preenchida posteriormente com o preço final para cada caso de painel usado
+precos = []
+
+# Criar matriz com a potência e preço por unidade de cada painel
+PAINEIS_SOLARES = df[['potencia', 'preco']].to_numpy()
+
+# Criar a array NOMES_PAINEIS com o nome dos paineis
+NOMES_PAINEIS = df['nome'].to_list()
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+def get_dados_consumo():
+    """ Pega os dados obtidos de analise_consumo
+        através de param.json
+
+    Returns:
+        float: retorna os valores calculados anteriormente
+    """
+    # Acessar os dados de consumo
+    dados_consumo = config.get('Dados_Consumo_Bruto', {})
+
+    media_mensal = dados_consumo.get('media_mensal')
+
+    # Ajuste com o custo de disponibilidade
+    nova_media_mensal = novos_dados(media_mensal)
+
+    return nova_media_mensal
+
 
 def novos_dados(media_m):
     """
@@ -47,8 +70,15 @@ def novos_dados(media_m):
         Bifásico: o custo de disponibilidade pago corresponde a 50 kWh;
         Trifásico: a taxa mínima é igual a 100 kWh.
     """
-    # Alimentação trifásica
-    tarifa = 100
+
+    # Qualquer erro de digitação na configuração resultará
+    # em uma análise trifásica
+    if padrao.lower() == 'monofasico':
+        tarifa = 30
+    elif padrao.lower() == 'bifasico':
+        tarifa = 50
+    else:
+        tarifa = 100        
 
     nova_media = media_m - tarifa
     novo_cdm = nova_media / 30
@@ -56,28 +86,6 @@ def novos_dados(media_m):
     aprx_cdm = round(novo_cdm, 2)
 
     return aprx_cdm 
-
-def get_dados_consumo():
-    """ Pega os dados obtidos de analise_consumo
-        através de param.json
-
-    Returns:
-        float: retorna os valores calculados anteriormente
-    """
-
-    with open(caminho_arquivo_json, 'r') as file:
-        config = json.load(file)
-
-        # Acessar os dados de consumo
-        dados_consumo = config.get('Dados_Consumo_Bruto', {})
-
-        media_mensal = dados_consumo.get('media_mensal')
-
-        # Ajuste com o custo de disponibilidade
-        nova_media_mensal = novos_dados(media_mensal)
-
-        return nova_media_mensal
-
 
 def calculo_potencia(media):
     """Cálculo da potência mínima do microgerador
@@ -144,19 +152,16 @@ def decidir_painel(p1, p2, p3, p4):
     consequentemente o que será usado
 
     Args:
-        p1 (_int_): _quantidade para o tipo de painel_
-        p2 (_int_): _quantidade para o tipo de painel_
-        p3 (_int_): _quantidade para o tipo de painel_
-        p4 (_int_): _quantidade para o tipo de painel_
+        px (_int_): _quantidade para o tipo de painel_
 
-    Returns:
-        _type_: _description_
     """
     preco_painel_1 = 0
     preco_painel_2 = 0
     preco_painel_3 = 0
     preco_painel_4 = 0
 
+    # Multiplica o preço unitário x qntd de painéis para calcular
+    # custo total para cada caso
     for i in range(len(PAINEIS_SOLARES)):
         if   i == 0:
             preco_painel_1 = p1 * PAINEIS_SOLARES[i][1]
@@ -171,9 +176,11 @@ def decidir_painel(p1, p2, p3, p4):
             preco_painel_4 = p4 * PAINEIS_SOLARES[i][1]
             precos.append(preco_painel_4)
 
+    # Seleciona o mais barato
     preco_selecionado = min(precos)
     painel_selecionado = precos.index(preco_selecionado)
     
+    # Retorna o índice correspondente ao painel solar escolhido
     return painel_selecionado
 
 def main():
