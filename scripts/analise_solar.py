@@ -18,12 +18,12 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 # Potência e preço por unidade dos painéis (kW e R$)
 df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
 
-caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-with open(caminho_arquivo_json, 'r') as file:
-    config = json.load(file)
+# caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+# with open(caminho_arquivo_json, 'r') as file:
+#     config = json.load(file)
 
-# Obter o valor de "padrao_alimentacao" do JSON
-padrao = config.get('padrao_alimentacao')
+# # Obter o valor de "padrao_alimentacao" do JSON
+# padrao = config.get('padrao_alimentacao')
 
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -50,6 +50,10 @@ def get_dados_consumo():
     Returns:
         float: retorna os valores calculados anteriormente
     """
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+
     # Acessar os dados de consumo
     dados_consumo = config.get('Dados_Consumo_Bruto', {})
 
@@ -73,6 +77,15 @@ def novos_dados(media_m):
 
     # Qualquer erro de digitação na configuração resultará
     # em uma análise trifásica
+
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+
+    # Obter o valor de "padrao_alimentacao" do JSON
+    padrao = config.get('padrao_alimentacao')
+
+
     if padrao.lower() == 'monofasico':
         tarifa = 30
     elif padrao.lower() == 'bifasico':
