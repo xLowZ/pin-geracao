@@ -3,5 +3,7 @@
     "media_mensal": 253.75,
     "consumo_diario_medio": 8.46
   },
-  "Dados_Solar": {}
+  "Dados_Solar": {},
+  "_comentario": "Entre com o padrao de alimentacao da sua residencia (sem acentos e minusculo): ",
+  "padrao_alimentacao": "trifasico"
 }
