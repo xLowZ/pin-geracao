@@ -7,11 +7,15 @@ import json
 from math import ceil
 import numpy as np
 
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# ================== Variáveis Globais e Constantes =========================
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 # Potência e preço por unidade dos painéis (kW e R$)
 PAINEIS_SOLARES = np.array([[0.330, 579.00], 
-                   [0.280, 519.00], 
-                   [0.460, 749.00],
-                   [0.280, 464.07]])
+                            [0.280, 519.00], 
+                            [0.460, 749.00],
+                            [0.280, 464.07]])
 
 # Lista que será preenchida posteriormente
 precos = []
@@ -21,13 +25,18 @@ NOMES_PAINEIS = ['ODA330_36_P',
                  'SUNOVA_SS_460_60_MDH',
                  'TRESUN_RS6C_280P']
 
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# =========================== Configurações =================================
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 # Obtém o caminho absoluto para o diretório do script
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-
-
 caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
 
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# =============================== Funções ===================================
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 def novos_dados(media_m):
     """
@@ -39,7 +48,7 @@ def novos_dados(media_m):
         Trifásico: a taxa mínima é igual a 100 kWh.
     """
     # Alimentação trifásica
-    tarifa = 30
+    tarifa = 100
 
     nova_media = media_m - tarifa
     novo_cdm = nova_media / 30
@@ -185,6 +194,10 @@ def main():
     print(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
     print(f'Capacidade ao instalar: {potencia_final:.3f}kW')
     print(f'Preço final: R${precos[painel_final]}')
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# =========================== Início da Execução ============================
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
 if __name__ == "__main__":

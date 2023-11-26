@@ -1,4 +1,7 @@
 {
-  "Dados_Consumo_Bruto": {},
+  "Dados_Consumo_Bruto": {
+    "media_mensal": 253.75,
+    "consumo_diario_medio": 8.46
+  },
   "Dados_Solar": {}
 }
