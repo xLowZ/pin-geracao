@@ -15,10 +15,10 @@ import json
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Constrói o caminho absoluto para o arquivo CSV
-arquivo_csv = os.path.join(script_dir, '..', 'data', 'conta_luz.csv')
+conta_luz_csv = os.path.join(script_dir, '..', 'data', 'conta_luz.csv')
 
 # Pegando os dados do arquivo conta_luz.csv
-data = pd.read_csv(arquivo_csv)
+data = pd.read_csv(conta_luz_csv)
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
@@ -101,8 +101,8 @@ def main():
     salvar_em_json({"Dados_Consumo_Bruto": dados_consumo}, caminho_arquivo_json)
 
     # Exibir resultados ou realizar outras ações (opcional)
-    print(f"Média Mensal: {nova_media}")
-    print(f"Consumo Diário Médio: {novo_consumo}")
+    print(f"Média Mensal: {nova_media}kWh")
+    print(f"Consumo Diário Médio: {novo_consumo}kWh")
 
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
