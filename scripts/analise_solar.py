@@ -57,7 +57,6 @@ def get_dados_consumo():
     dados_consumo = config.get('Dados_Consumo_Bruto', {})
 
     media_mensal = dados_consumo.get('media_mensal')
-
     # Ajuste com o custo de disponibilidade
     nova_media_mensal = novos_dados(media_mensal, config)
 

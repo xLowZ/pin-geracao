@@ -38,15 +38,17 @@ def consumo_resultados():
     messagebox.showinfo("Resultados do Consumo de Energia", resultado_str)
 
 def criar_interface():
-    root = tk.Tk()
+    root = tb.Window(themename="vapor")
     root.title("Análise de Placa Solar")
-    root.iconbitmap('')
     root.geometry('500x350')
 
-    button_analisar0 = tk.Button(root, text="Consumo", font=("Helvetica",15), command=consumo_resultados)
+    titulo = tb.Label(text="Proteus Analyzer", font=("Helvetica", 28), bootstyle="light")
+    titulo.pack(pady=50)
+
+    button_analisar0 = tb.Button(text="Consumo", bootstyle="success, outline", command=consumo_resultados)
     button_analisar0.pack(pady=20)
 
-    button_analisar1 = tk.Button(root, text="Realizar Análise", font=("Helvetica",15), command=solar_resultados)
+    button_analisar1 = tb.Button(text="Realizar Análise", bootstyle="success, outline", command=solar_resultados)
     button_analisar1.pack(pady=20)
 
     root.mainloop()
