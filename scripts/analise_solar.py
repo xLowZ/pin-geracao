@@ -16,15 +16,8 @@ import json
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Potência e preço por unidade dos painéis (kW e R$)
+# Df = DataFrame
 df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
-
-# caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-# with open(caminho_arquivo_json, 'r') as file:
-#     config = json.load(file)
-
-# # Obter o valor de "padrao_alimentacao" do JSON
-# padrao = config.get('padrao_alimentacao')
-
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ================== Variáveis Globais e Constantes =========================
@@ -32,6 +25,12 @@ df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
 
 # Lista que será preenchida posteriormente com o preço final para cada caso de painel usado
 precos = []
+
+# ============== Enums pra evitar numeros mágicos  =====================
+
+POTENCIA, PRECO_UNITARIO = range(2)
+DIAS_MES = 30
+NUM_MESES_ANO = 12
 
 # Criar matriz com a potência e preço por unidade de cada painel
 PAINEIS_SOLARES = df[['potencia', 'preco']].to_numpy()
@@ -94,7 +93,7 @@ def novos_dados(media_m):
         tarifa = 100        
 
     nova_media = media_m - tarifa
-    novo_cdm = nova_media / 30
+    novo_cdm = nova_media / DIAS_MES
 
     aprx_cdm = round(novo_cdm, 2)
 
@@ -116,11 +115,11 @@ def calculo_potencia(media):
         cdm (float): consumo diário médio obtido
     """
 
-    Td = 0.75
-    Hsp = 4.88
+    taxa_desempenho = 0.75
+    HSP = 4.88
 
     # media = novo consumo médio diário
-    Pm = media / (Td * Hsp)
+    Pm = media / (taxa_desempenho * HSP)
 
     return Pm
 
@@ -140,15 +139,15 @@ def get_numero_de_paineis(Ps):
     numero_de_paineis_tipo4 = 0
 
     # Cálculo iterando pela lista de painéis
-    for i in range(len(PAINEIS_SOLARES)):
-        if   i == 0:
-            numero_de_paineis_tipo1 = Ps / PAINEIS_SOLARES[i][0]
-        elif i == 1:    
-            numero_de_paineis_tipo2 = Ps / PAINEIS_SOLARES[i][0]
-        elif i == 2:    
-            numero_de_paineis_tipo3 = Ps / PAINEIS_SOLARES[i][0]
-        elif i == 3:    
-            numero_de_paineis_tipo4 = Ps / PAINEIS_SOLARES[i][0]
+    for indice_painel in range(len(PAINEIS_SOLARES)):
+        if   indice_painel == 0:
+            numero_de_paineis_tipo1 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
+        elif indice_painel == 1:    
+            numero_de_paineis_tipo2 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
+        elif indice_painel == 2:    
+            numero_de_paineis_tipo3 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
+        elif indice_painel == 3:    
+            numero_de_paineis_tipo4 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
 
 
     # Arredondando nº de painéis para cima
@@ -175,18 +174,18 @@ def decidir_painel(p1, p2, p3, p4):
 
     # Multiplica o preço unitário x qntd de painéis para calcular
     # custo total para cada caso
-    for i in range(len(PAINEIS_SOLARES)):
-        if   i == 0:
-            preco_painel_1 = p1 * PAINEIS_SOLARES[i][1]
+    for indice_paniel in range(len(PAINEIS_SOLARES)):
+        if   indice_paniel == 0:
+            preco_painel_1 = p1 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
             precos.append(preco_painel_1)
-        elif i == 1:    
-            preco_painel_2 = p2 * PAINEIS_SOLARES[i][1]
+        elif indice_paniel == 1:    
+            preco_painel_2 = p2 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
             precos.append(preco_painel_2)
-        elif i == 2:    
-            preco_painel_3 = p3 * PAINEIS_SOLARES[i][1]
+        elif indice_paniel == 2:    
+            preco_painel_3 = p3 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
             precos.append(preco_painel_3)
-        elif i == 3:    
-            preco_painel_4 = p4 * PAINEIS_SOLARES[i][1]
+        elif indice_paniel == 3:    
+            preco_painel_4 = p4 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
             precos.append(preco_painel_4)
 
     # Seleciona o mais barato
