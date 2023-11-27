@@ -201,7 +201,7 @@ def main():
 
     painel_final = decidir_painel(qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4)
 
-    potencia_final = quantidade_paineis[painel_final] * PAINEIS_SOLARES[painel_final, 0]
+    potencia_final = quantidade_paineis[painel_final] * PAINEIS_SOLARES[painel_final, POTENCIA]
 
     print(f'Painel Selecionado: {NOMES_PAINEIS[painel_final]}')
     print(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
