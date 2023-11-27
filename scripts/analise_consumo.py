@@ -20,6 +20,11 @@ conta_luz_csv = os.path.join(script_dir, '..', 'data', 'conta_luz.csv')
 # Pegando os dados do arquivo conta_luz.csv
 data = pd.read_csv(conta_luz_csv)
 
+# ============================= Constantes ==================================
+
+DIAS_MES = 30
+NUM_MESES_ANO = 12
+
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -30,7 +35,7 @@ def get_media():
         Somatório de todo o consumo
         dividido pelo número total de meses em 1 ano 
     """
-    media = (data["Consumo[kWh]"].sum()) / 12
+    media = (data["Consumo[kWh]"].sum()) / NUM_MESES_ANO
     return media
 
 def get_consumo_diario_medio(media):
@@ -43,7 +48,7 @@ def get_consumo_diario_medio(media):
     """
 
     # Consumo Diário Médio = cdm
-    cdm = media / 30
+    cdm = media / DIAS_MES
     return cdm 
 
 def arredondar_valores(media, consumo):
