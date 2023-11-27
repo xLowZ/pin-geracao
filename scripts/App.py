@@ -1,8 +1,7 @@
 # Importando os módulos
-import numpy as np
-import pandas as pd
 import analise_consumo
 import analise_solar
+import interface
 
 
 
@@ -17,6 +16,10 @@ def executar_todos_os_modulos():
     print("\nAnálise Solar...\n")
     analise_solar.main()
 
+    interface.criar_interface()
+
+
+
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ============================ Inicialização ================================
@@ -24,4 +27,3 @@ def executar_todos_os_modulos():
 
 if __name__ == "__main__":
     executar_todos_os_modulos()
-    input() # Para o terminal não fechar diretamente

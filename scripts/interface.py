@@ -1,24 +1,23 @@
+import os
 import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
-import numpy as np
-import analise_consumo
-import analise_solar
+import json
 
-
+script_dir = os.path.dirname(os.path.abspath(__file__)) 
 
 def solar_resultados():
-    media_mensal = analise_solar.get_dados_consumo()
-    Potencia = analise_solar.calculo_potencia(media_mensal)
-    qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4 = analise_solar.get_numero_de_paineis(Potencia)
-    quantidade_paineis = np.array([qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4])
-    painel_final = analise_solar.decidir_painel(qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4)
-    potencia_final = quantidade_paineis[painel_final] * analise_solar.PAINEIS_SOLARES[painel_final, 0]
-    preco_final = analise_solar.precos[painel_final]
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+    dados_solar = config.get('Dados_Solar', {})
+    
 
-    painel_selecionado = analise_solar.NOMES_PAINEIS[painel_final]
-    quantidade_paineis_necessarios = quantidade_paineis[painel_final]
+    painel_selecionado = dados_solar.get('painel_selecionado') 
+    quantidade_paineis_necessarios = dados_solar.get('qtd_paineis_necessarios')
+    potencia_final = dados_solar.get('capacidade_total')
+    preco_final = dados_solar.get('preco_instalacao')
 
     resultado_str = f'Painel Selecionado: {painel_selecionado}\n' \
                     f'Quantidade de painéis necessários: {quantidade_paineis_necessarios}\n' \
@@ -28,12 +27,16 @@ def solar_resultados():
     messagebox.showinfo("Resultados da Análise", resultado_str)
 
 def consumo_resultados():
-    media_mensal = analise_consumo.get_media()
-    consumo_diario_medio = analise_consumo.get_consumo_diario_medio(media_mensal)
-    nova_media, novo_consumo = analise_consumo.arredondar_valores(media_mensal, consumo_diario_medio)
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+    dados_consumo = config.get('Dados_Consumo_Bruto', {})
 
-    resultado_str = f'Média Mensal: {nova_media} kWh\n' \
-                    f'Consumo Diário Médio: {novo_consumo} kWh'
+    media_mensal = dados_consumo.get('media_mensal')
+    consumo_diario_medio = dados_consumo.get('consumo_diario_medio')
+
+    resultado_str = f'Média Mensal: {media_mensal} kWh\n' \
+                    f'Consumo Diário Médio: {consumo_diario_medio} kWh'
 
     messagebox.showinfo("Resultados do Consumo de Energia", resultado_str)
 
