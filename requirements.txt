@@ -1,4 +1,4 @@
 pandas
 numpy
-tkinter
+tk
 ttkbootstrap
