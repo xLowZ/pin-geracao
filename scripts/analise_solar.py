@@ -59,12 +59,12 @@ def get_dados_consumo():
     media_mensal = dados_consumo.get('media_mensal')
 
     # Ajuste com o custo de disponibilidade
-    nova_media_mensal = novos_dados(media_mensal)
+    nova_media_mensal = novos_dados(media_mensal, config)
 
     return nova_media_mensal
 
 
-def novos_dados(media_m):
+def novos_dados(media_m, config):
     """
         Valores deverão ser ajustados de acordo
         com o desconto do custo de disponibilidade
@@ -76,14 +76,8 @@ def novos_dados(media_m):
 
     # Qualquer erro de digitação na configuração resultará
     # em uma análise trifásica
-
-    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-    with open(caminho_arquivo_json, 'r') as file:
-        config = json.load(file)
-
     # Obter o valor de "padrao_alimentacao" do JSON
     padrao = config.get('padrao_alimentacao')
-
 
     if padrao.lower() == 'monofasico':
         tarifa = 30
