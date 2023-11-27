@@ -189,6 +189,29 @@ def decidir_painel(p1, p2, p3, p4):
     # Retorna o índice correspondente ao painel solar escolhido
     return painel_selecionado
 
+def salvar_em_json(dados, caminho_arquivo):
+    """ Salvando dados obtivos
+
+    Args:
+        dados (dictionary): dicionário contendo o conteúdo a ser salvo
+        caminho_arquivo (None): caminho para o arquivo
+    """
+    # Leitura do arquivo JSON atual
+    try:
+        with open(caminho_arquivo, 'r') as arquivo:
+            conteudo_atual = json.load(arquivo)
+    except FileNotFoundError:
+        # Se o arquivo não existir, crie um dicionário vazio
+        conteudo_atual = {}
+
+    # Atualização do dicionário com os novos dados
+    conteudo_atual.update(dados)
+
+    # Escrita do dicionário atualizado de volta no arquivo JSON
+    with open(caminho_arquivo, 'w') as arquivo:
+        json.dump(conteudo_atual, arquivo, indent=2)
+
+
 def main():
     media_mensal = get_dados_consumo()
     
@@ -202,6 +225,19 @@ def main():
     painel_final = decidir_painel(qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4)
 
     potencia_final = quantidade_paineis[painel_final] * PAINEIS_SOLARES[painel_final, POTENCIA]
+
+    # Dicionário para organizar os dados
+    dados_solar = {
+        "painel_selecionado": NOMES_PAINEIS[painel_final], 
+        "qtd_paineis_necessarios": int(quantidade_paineis[painel_final]),
+        "capacidade_total": round(potencia_final, 2),
+        "preco_instalacao": precos[painel_final],
+        "demanda": round(Potencia, 4)
+    }
+
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    # Salvar os dados em um arquivo JSON
+    salvar_em_json({"Dados_Solar": dados_solar}, caminho_arquivo_json)
 
     print(f'Painel Selecionado: {NOMES_PAINEIS[painel_final]}')
     print(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
