@@ -1,9 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
+import ttkbootstrap as tb
+from ttkbootstrap.constants import *
 import numpy as np
-import pandas as pd
 import analise_consumo
 import analise_solar
+
 
 
 def solar_resultados():
@@ -38,6 +40,8 @@ def consumo_resultados():
 def criar_interface():
     root = tk.Tk()
     root.title("Análise de Placa Solar")
+    root.iconbitmap('')
+    root.geometry('500x350')
 
     button_analisar0 = tk.Button(root, text="Consumo", font=("Helvetica",15), command=consumo_resultados)
     button_analisar0.pack(pady=20)
