@@ -29,6 +29,17 @@ dataPaineis = pd.read_csv(paineis_csv)
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+def get_painel_selecionado_e_capacidade():
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+
+    # Acessar os dados de consumo
+    dados_painel = config.get('Dados_Solar', {})
+
+    return dados_painel.get('painel_selecionado'), dados_painel.get('capacidade_total') * 1000     
+                                                    # x1000 = Transformar de kW para W 
+
 def paineis_serie(Vinv, Voc_painel):
     """Calcula o nº max de painéis em serie suportados
 
@@ -67,12 +78,12 @@ def get_tensao_entrada(Vinv_min, Npaineis_serie, Vm, Vinv):
         Vm : Tensão de máxima potência dos painéis
         Vinv : Tensão máxima de entrada do inversor
     """
-    expr = Npaineis_serie * Vm
+    exprV = Npaineis_serie * Vm
 
-    if Vinv_min < expr < Vinv:
-        return expr, True
+    if Vinv_min < exprV < Vinv:
+        return exprV, True
     else:
-        return expr, False
+        return exprV, False
     
 def get_corrente_entrada(Npaineis_paralelo, Isc_painel, Iinv):
     """Calcula a corrente de entrada e verifica se está menor que a suportada.
@@ -133,23 +144,36 @@ def main():
     # ============================== Variáveis ==================================
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+    # Painel
     caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-    
+    painel_selecionado, capacidade_sistema = get_painel_selecionado_e_capacidade()
 
+    Voc_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'tensao_em_aberto'].values[0]
+    Isc_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'corrente_cc'].values[0]
+    V_max_pot_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'tensao_max_pot'].values[0]
+
+    # Inversor
+    V_max_inversor = dataInversor['MAX_tensao_entrada[Vcc]'].iloc[0] # SUS (conferir valores)
+    V_min_inversor = dataInversor['MIN_tensao_entrada[Vcc]'].iloc[0] # SUS (conferir valores)
+    I_max_inversor = dataInversor['corrente_max[A]'].iloc[0]
+    Pot_max_inversor = dataInversor['potencia_nominal_saida[W]'].iloc[0]
+    V_min_mppt = dataInversor['min_MPPT[Vcc]'].iloc[0]
+    V_max_mppt = dataInversor['max_MPPT[Vcc]'].iloc[0]
+    
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     # ========================= Execução dos Cálculos ===========================
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-    num_paineis_em_serie = paineis_serie()
-    num_paineis_em_paralelo = paineis_paralelo()
-    fdi = get_FDI()
-    tensao_entrada, flag_tensao = get_tensao_entrada()
-    corrente_entrada, flag_corrente = get_corrente_entrada()
-    flag_MPPT = verif_tensao_MPPT()
+    num_paineis_em_serie = paineis_serie(V_max_inversor, Voc_painel)
+    num_paineis_em_paralelo = paineis_paralelo(I_max_inversor, Isc_painel)
+    fdi = get_FDI(Pot_max_inversor, capacidade_sistema)
+    tensao_entrada, flag_tensao = get_tensao_entrada(V_min_inversor, num_paineis_em_serie,  V_max_pot_painel, V_max_inversor)
+    corrente_entrada, flag_corrente = get_corrente_entrada(num_paineis_em_paralelo, Isc_painel, I_max_inversor)
+    flag_MPPT = verif_tensao_MPPT(tensao_entrada, V_min_mppt, V_max_mppt)
 
     if flag_tensao and flag_corrente and flag_MPPT:
-        print('Tudo dentro dos conformes, \033[34minstalação possível\033[0m')
-        instalacao = 'Possível'
+        print('Tudo dentro dos conformes, \033[32minstalação possível\033[0m')
+        instalacao = 'Possivel'
     else:
         instalacao = 'Revisar'
         if not flag_tensao:
@@ -161,17 +185,16 @@ def main():
 
     # Dicionário para organizar os dados
     dados_inversor = {
-        "paineis_em_serie": num_paineis_em_serie, 
-        "paineis_em_paralelo": num_paineis_em_paralelo,
+        "maximo_de_paineis_em_serie": num_paineis_em_serie, 
+        "maximo_de_paineis_em_paralelo": num_paineis_em_paralelo,
         "fator_de_dimensionamento": fdi,
-        "tensao_de_entrada": tensao_entrada,
-        "corrente_de_entrada": corrente_entrada,
+        "maxima_tensao_de_entrada": tensao_entrada,
+        "maxima_corrente_de_entrada": corrente_entrada,
         "instalacao": instalacao  
     }
     
     salvar_em_json({"Dados_Inversor": dados_inversor}, caminho_arquivo_json)
 
-  
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ============================ Inicialização ================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
