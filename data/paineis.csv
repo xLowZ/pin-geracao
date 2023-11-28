@@ -1,4 +1,4 @@
-nome,potencia,preco,tensao_max_pot,corrente_max_pot,tensao_em_aberto,corrente_cc,max_tensao,garantia
+nome,potencia[kW],preco,tensao_max_pot,corrente_max_pot,tensao_em_aberto,corrente_cc,max_tensao,garantia
 ODA330_36_P,0.330,579.00,37.26,8.86,44.74,9.57,1000,12
 OSDA_ODA280_30_P,0.280,519.00,31.94,8.77,38.33,9.41,1000,12
 SUNOVA_SS_460_60_MDH,0.460,749.00,34.95,13.17,41.85,13.59,1500,15
