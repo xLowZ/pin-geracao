@@ -1,15 +1,6 @@
 {
-  "Dados_Consumo_Bruto": {
-    "media_mensal": 253.75,
-    "consumo_diario_medio": 8.46
-  },
-  "Dados_Solar": {
-    "painel_selecionado": "TRESUN_RS6C_280P",
-    "qtd_paineis_necessarios": 5,
-    "capacidade_total": 1.4,
-    "preco_instalacao": 2320.35,
-    "demanda": 1.3989
-  },
+  "Dados_Consumo_Bruto": {},
+  "Dados_Solar": {},
   "_comentario": "Entre com o padrao de alimentacao da sua residencia (sem acentos e minusculo): ",
   "padrao_alimentacao": "trifasico"
 }
