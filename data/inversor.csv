@@ -1,0 +1,2 @@
+modelo,tensao_entrada_min_range[Vcc],tensao_entrada_max_range[Vcc],max_MPPT[Vcc],min_MPPT[Vcc],tensao_inicializacao[Vcc],corrente_max[A],potencia_nominal_saida[W],tensao_saida_min[Vca],tensao_saida_max[Vca],MAX_tensao_entrada[Vcc],MIN_tensao_entrada[Vcc]
+IP_2000_21_PLUS,21.6,32.0,760.0,220.0,22.3,100.0,2000.0,100.0,120.0,800.0,120.0
