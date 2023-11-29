@@ -33,7 +33,7 @@ DIAS_MES = 30
 NUM_MESES_ANO = 12
 
 # Criar matriz com a potência e preço por unidade de cada painel
-PAINEIS_SOLARES = df[['potencia', 'preco']].to_numpy()
+PAINEIS_SOLARES = df[['potencia[kW]', 'preco']].to_numpy()
 
 # Criar a array NOMES_PAINEIS com o nome dos paineis
 NOMES_PAINEIS = df['nome'].to_list()
