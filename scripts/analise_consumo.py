@@ -35,8 +35,7 @@ def get_media():
         Somatório de todo o consumo
         dividido pelo número total de meses em 1 ano 
     """
-    media = (data["Consumo[kWh]"].sum()) / NUM_MESES_ANO
-    return media
+    return round(((data["Consumo[kWh]"].sum()) / NUM_MESES_ANO), 2)
 
 def get_consumo_diario_medio(media):
     """
@@ -48,22 +47,7 @@ def get_consumo_diario_medio(media):
     """
 
     # Consumo Diário Médio = cdm
-    cdm = media / DIAS_MES
-    return cdm 
-
-def arredondar_valores(media, consumo):
-    """ 
-    Arredondamento dos valores
-    para melhor formatação
-
-    Args:
-        media (float): média mensal obtida
-        consumo (float): consumo diário médio obtido
-    """
-    nova_media = round(media, 2)
-    novo_consumo = round(consumo, 2)
-
-    return nova_media, novo_consumo
+    return round((media / DIAS_MES), 2)
 
 def salvar_em_json(dados, caminho_arquivo):
     """ Salvando dados obtivos
@@ -87,18 +71,15 @@ def salvar_em_json(dados, caminho_arquivo):
     with open(caminho_arquivo, 'w') as arquivo:
         json.dump(conteudo_atual, arquivo, indent=2)
 
-
-
 def main():
     
     media_mensal = get_media()
     consumo_diario_medio = get_consumo_diario_medio(media_mensal)
-    nova_media, novo_consumo = arredondar_valores(media_mensal, consumo_diario_medio)
 
     # Dicionário para organizar os dados
     dados_consumo = {
-        "media_mensal": nova_media, 
-        "consumo_diario_medio": novo_consumo
+        "media_mensal": media_mensal, 
+        "consumo_diario_medio": consumo_diario_medio
     }
 
     caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
@@ -106,14 +87,12 @@ def main():
     salvar_em_json({"Dados_Consumo_Bruto": dados_consumo}, caminho_arquivo_json)
 
     # Exibir resultados ou realizar outras ações (opcional)
-    print(f"Média Mensal: {nova_media}kWh")
-    print(f"Consumo Diário Médio: {novo_consumo}kWh")
-
+    print(f"Média Mensal: {media_mensal}kWh")
+    print(f"Consumo Diário Médio: {consumo_diario_medio}kWh")
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Início da Execução ============================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 
 if __name__ == "__main__":
     main()
