@@ -157,8 +157,9 @@ def main():
     V_min_inversor = dataInversor['MIN_tensao_entrada[Vcc]'].iloc[0] # SUS (conferir valores)
     I_max_inversor = dataInversor['corrente_max[A]'].iloc[0]
     Pot_max_inversor = dataInversor['potencia_nominal_saida[W]'].iloc[0]
-    V_min_mppt = dataInversor['min_MPPT[Vcc]'].iloc[0]
-    V_max_mppt = dataInversor['max_MPPT[Vcc]'].iloc[0]
+
+    # V_min_mppt = dataInversor['min_MPPT[Vcc]'].iloc[0]
+    # V_max_mppt = dataInversor['max_MPPT[Vcc]'].iloc[0]
     
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     # ========================= Execução dos Cálculos ===========================
@@ -169,9 +170,10 @@ def main():
     fdi = get_FDI(Pot_max_inversor, capacidade_sistema)
     tensao_entrada, flag_tensao = get_tensao_entrada(V_min_inversor, num_paineis_em_serie,  V_max_pot_painel, V_max_inversor)
     corrente_entrada, flag_corrente = get_corrente_entrada(num_paineis_em_paralelo, Isc_painel, I_max_inversor)
-    flag_MPPT = verif_tensao_MPPT(tensao_entrada, V_min_mppt, V_max_mppt)
 
-    if flag_tensao and flag_corrente and flag_MPPT:
+    # flag_MPPT = verif_tensao_MPPT(tensao_entrada, V_min_mppt, V_max_mppt)
+
+    if flag_tensao and flag_corrente: #and flag_MPPT:
         print('Tudo dentro dos conformes, \033[32minstalação possível\033[0m')
         instalacao = 'Possivel'
     else:
@@ -180,8 +182,8 @@ def main():
             print('\033[33mAVISO\033[0m:\nFora da faixa de tensão do inversor')
         elif not flag_corrente:
             print('\033[33mAVISO\033[0m:\nFora da faixa de corrente do inversor')
-        else:
-            print('\033[33mAVISO\033[0m:\nFora da faixa MPPT do inversor')   
+        # else:
+        #     print('\033[33mAVISO\033[0m:\nFora da faixa MPPT do inversor')   
 
     # Dicionário para organizar os dados
     dados_inversor = {
