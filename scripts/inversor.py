@@ -175,7 +175,7 @@ def main():
 
     if flag_tensao and flag_corrente: #and flag_MPPT:
         print('Tudo dentro dos conformes, \033[32minstalação possível\033[0m')
-        instalacao = 'Possivel'
+        instalacao = 'Possível'
     else:
         instalacao = 'Revisar'
         if not flag_tensao:
