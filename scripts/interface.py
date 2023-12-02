@@ -1,4 +1,5 @@
 import os
+import webbrowser
 import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as tb
@@ -77,16 +78,18 @@ def inversor_resultados():
 
 # Função que mostra as informações sobre o aplicativo
 def mostrar_sobre():
-    sobre = "Proteus Analyzer\n\nEste aplicativo criado pelo grupo Proteus, ajuda a analisar painéis solares, consumo geral e inversores.\n\nVersão 1.0"
-    messagebox.showinfo("Sobre", sobre)
+    sobre = "Proteus Analyzer™ v1.0\n\nEste aplicativo criado pelo grupo Proteus, ajuda a simplificar a análise e cálculos relacionados à instalação de geração distribuída fotovoltaica residencial.\n\n\nGostaria de acessar o nosso repositório no GitHub?"
+    resposta = messagebox.askyesno("Sobre", sobre)  # Exibe a mensagem com um botão de confirmação
+    if resposta:
+        webbrowser.open_new_tab("https://github.com/xLowZ/pin-geracao") 
 
 # Função que cria a interface gráfica
 def criar_interface():
-    root = tb.Window(themename="solar")
+    root = tb.Window(themename="darkly")
     root.title("Proteus Analyzer")
     root.geometry('500x400')
 
-    titulo = tb.Label(text="Proteus Analyzer", font=("Helvetica", 28), bootstyle="primary")
+    titulo = tb.Label(text="Proteus Analyzer", font=("Bahnschrift", 28), bootstyle="warning")
     titulo.pack(pady=30)
 
     # Botões para acionar as diferentes análises
