@@ -40,6 +40,29 @@ def consumo_resultados():
 
     messagebox.showinfo("Resultados do Consumo de Energia", resultado_str)
 
+def inversor_resultados():
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+    dados_inversor = config.get('Dados_Inversor', {})
+
+    maxPS = dados_inversor.get('maximo_de_paineis_em_serie')
+    maxPP = dados_inversor.get('maximo_de_paineis_em_paralelo')
+    fator_dimens = dados_inversor.get('fator_de_dimensionamento')
+    max_tensao = dados_inversor.get('maxima_tensao_de_entrada')
+    max_corrente = dados_inversor.get('maxima_corrente_de_entrada')
+    instalacao_status = dados_inversor.get('instalacao')
+
+    resultado_str = f'Máximo de Painéis em Série: {maxPS}\n' \
+                    f'Máximo de Painéis em Paralelo: {maxPP}\n' \
+                    f'Fator de Dimensionamento: {fator_dimens}\n' \
+                    f'Máxima Tensão de Entrada: {max_tensao} V\n' \
+                    f'Máxima Corrente de Entrada: {max_corrente} A\n' \
+                    f'Status da Instalação: {instalacao_status}\n' \
+    
+    messagebox.showinfo("Resultados do Inversor", resultado_str)
+
+
 def criar_interface():
     root = tb.Window(themename="vapor")
     root.title("Análise de Placa Solar")
@@ -51,8 +74,11 @@ def criar_interface():
     button_analisar0 = tb.Button(text="Consumo", bootstyle="success, outline", command=consumo_resultados)
     button_analisar0.pack(pady=20)
 
-    button_analisar1 = tb.Button(text="Realizar Análise", bootstyle="success, outline", command=solar_resultados)
+    button_analisar1 = tb.Button(text="Realizar Análise das Placas", bootstyle="success, outline", command=solar_resultados)
     button_analisar1.pack(pady=20)
+
+    button_analisar2 = tb.Button(text="Realizar Análise do Inversor", bootstyle="success, outline", command=inversor_resultados)
+    button_analisar2.pack(pady=20)
 
     root.mainloop()
 
