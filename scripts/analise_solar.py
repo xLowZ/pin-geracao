@@ -104,13 +104,18 @@ def calculo_potencia(media):
         cdm (float): consumo diário médio obtido
     """
 
-    taxa_desempenho = 0.75 #
-    HSP = 4.88
+    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    with open(caminho_arquivo_json, 'r') as file:
+        config = json.load(file)
+
+    HSP = float(config.get('HSP'))
+
+    TAXA_DESEMPENHO = 0.75 #
 
     # media = novo consumo médio diário
-    Pm = media / (taxa_desempenho * HSP)
+    Pm = media / (TAXA_DESEMPENHO * HSP)
 
-    return Pm #
+    return Pm 
 
 def get_numero_de_paineis(Ps):
     """Cálculo do número de paneis necessários
