@@ -1,7 +1,6 @@
 {
-  "Dados_Consumo_Bruto": {},
-  "Dados_Solar": {},
-  "Dados_Inversor": {},
-  "_comentario": "Entre com o padrao de alimentacao da sua residencia (sem acentos e minusculo): ",
-  "padrao_alimentacao": "trifasico"
+  "A:": "Entre com o padrao de alimentacao da sua residencia (sem acentos e minusculo): ",
+  "padrao_alimentacao": "trifasico",
+  "B:": "Entre com o indice solar encontrado (em HSP):",
+  "HSP": "4.88"
 }
