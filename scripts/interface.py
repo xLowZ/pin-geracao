@@ -3,7 +3,7 @@ import webbrowser
 import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as tb
-from ttkbootstrap.constants import *
+# from ttkbootstrap.constants import *
 import json
 
 # Obtém o diretório do script atual
