@@ -60,7 +60,7 @@ def inversor_resultados():
 
     # Extrai os dados do inversor do arquivo JSON
     maxPS = dados_inversor.get('maximo_de_paineis_em_serie')
-    maxPP = dados_inversor.get('maximo_de_paineis_paralelo')
+    maxPP = dados_inversor.get('maximo_de_paineis_em_paralelo')
     fator_dimens = dados_inversor.get('fator_de_dimensionamento')
     max_tensao = dados_inversor.get('maxima_tensao_de_entrada')
     max_corrente = dados_inversor.get('maxima_corrente_de_entrada')
