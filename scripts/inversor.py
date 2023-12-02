@@ -137,7 +137,6 @@ def salvar_em_json(dados, caminho_arquivo):
     with open(caminho_arquivo, 'w') as arquivo:
         json.dump(conteudo_atual, arquivo, indent=2)
 
-
 def main():
 
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -178,12 +177,12 @@ def main():
         instalacao = 'Possível'
     else:
         instalacao = 'Revisar'
-        if not flag_tensao:
-            print('\033[33mAVISO\033[0m:\nFora da faixa de tensão do inversor')
+        if not flag_tensao and not flag_corrente:
+            print('\033[33mAVISO\033[0m:\nFora da faixa de tensão e corrente do inversor')
         elif not flag_corrente:
             print('\033[33mAVISO\033[0m:\nFora da faixa de corrente do inversor')
-        # else:
-        #     print('\033[33mAVISO\033[0m:\nFora da faixa MPPT do inversor')   
+        else:
+            print('\033[33mAVISO\033[0m:\nFora da faixa de tensão do inversor')   
 
     # Dicionário para organizar os dados
     dados_inversor = {
