@@ -57,11 +57,9 @@ def get_dados_consumo():
     dados_consumo = config.get('Dados_Consumo_Bruto', {})
 
     media_mensal = dados_consumo.get('media_mensal')
+
     # Ajuste com o custo de disponibilidade
-    nova_media_mensal = novos_dados(media_mensal, config)
-
-    return nova_media_mensal
-
+    return novos_dados(media_mensal, config)
 
 def novos_dados(media_m, config):
     """
@@ -88,9 +86,7 @@ def novos_dados(media_m, config):
     nova_media = media_m - tarifa
     novo_cdm = nova_media / DIAS_MES
 
-    aprx_cdm = round(novo_cdm, 2)
-
-    return aprx_cdm 
+    return round(novo_cdm, 2)
 
 def calculo_potencia(media):
     """Cálculo da potência mínima do microgerador
@@ -108,14 +104,13 @@ def calculo_potencia(media):
         cdm (float): consumo diário médio obtido
     """
 
-    taxa_desempenho = 0.75
+    taxa_desempenho = 0.75 #
     HSP = 4.88
 
     # media = novo consumo médio diário
     Pm = media / (taxa_desempenho * HSP)
 
-    return Pm
-
+    return Pm #
 
 def get_numero_de_paineis(Ps):
     """Cálculo do número de paneis necessários
@@ -151,7 +146,6 @@ def get_numero_de_paineis(Ps):
 
     return numero_paineis_final_1, numero_paineis_final_2, numero_paineis_final_3, numero_paineis_final_4
 
-
 def decidir_painel(p1, p2, p3, p4):
     """Função para calcular o painel mais barato,
     consequentemente o que será usado
@@ -183,10 +177,9 @@ def decidir_painel(p1, p2, p3, p4):
 
     # Seleciona o mais barato
     preco_selecionado = min(precos)
-    painel_selecionado = precos.index(preco_selecionado)
-    
+
     # Retorna o índice correspondente ao painel solar escolhido
-    return painel_selecionado
+    return precos.index(preco_selecionado)
 
 def salvar_em_json(dados, caminho_arquivo):
     """ Salvando dados obtivos
@@ -209,7 +202,6 @@ def salvar_em_json(dados, caminho_arquivo):
     # Escrita do dicionário atualizado de volta no arquivo JSON
     with open(caminho_arquivo, 'w') as arquivo:
         json.dump(conteudo_atual, arquivo, indent=2)
-
 
 def main():
     media_mensal = get_dados_consumo()
@@ -246,7 +238,6 @@ def main():
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Início da Execução ============================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 
 if __name__ == "__main__":
     main()    
