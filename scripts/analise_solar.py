@@ -23,9 +23,6 @@ df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
 # ================== Variáveis Globais e Constantes =========================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-# Lista que será preenchida posteriormente com o preço final para cada caso de painel usado
-precos = []
-
 # ============== Enums pra evitar numeros mágicos  =====================
 
 POTENCIA, PRECO_UNITARIO = range(2)
@@ -110,7 +107,7 @@ def calculo_potencia(media):
 
     HSP = float(config.get('HSP'))
 
-    TAXA_DESEMPENHO = 0.75 #
+    TAXA_DESEMPENHO = 0.75 
 
     # media = novo consumo médio diário
     Pm = media / (TAXA_DESEMPENHO * HSP)
@@ -126,65 +123,36 @@ def get_numero_de_paineis(Ps):
     """
 
     # Número de painéis necessários por modelo
-    numero_de_paineis_tipo1 = 0
-    numero_de_paineis_tipo2 = 0
-    numero_de_paineis_tipo3 = 0
-    numero_de_paineis_tipo4 = 0
+    quantidade_paineis = []
 
     # Cálculo iterando pela lista de painéis
-    for indice_painel in range(len(PAINEIS_SOLARES)):
-        if   indice_painel == 0:
-            numero_de_paineis_tipo1 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
-        elif indice_painel == 1:    
-            numero_de_paineis_tipo2 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
-        elif indice_painel == 2:    
-            numero_de_paineis_tipo3 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
-        elif indice_painel == 3:    
-            numero_de_paineis_tipo4 = Ps / PAINEIS_SOLARES[indice_painel][POTENCIA]
+    for painel in range(len(PAINEIS_SOLARES)):
+        numero_paineis = Ps / PAINEIS_SOLARES[painel][POTENCIA]
+        quantidade_paineis.append(ceil(numero_paineis))
 
+    return np.array(quantidade_paineis)
 
-    # Arredondando nº de painéis para cima
-    numero_paineis_final_1 = ceil(numero_de_paineis_tipo1)
-    numero_paineis_final_2 = ceil(numero_de_paineis_tipo2)
-    numero_paineis_final_3 = ceil(numero_de_paineis_tipo3)
-    numero_paineis_final_4 = ceil(numero_de_paineis_tipo4)
-
-    return numero_paineis_final_1, numero_paineis_final_2, numero_paineis_final_3, numero_paineis_final_4
-
-def decidir_painel(p1, p2, p3, p4):
+def decidir_painel(num_paineis):
     """Função para calcular o painel mais barato,
     consequentemente o que será usado
 
     Args:
-        px (_int_): _quantidade para o tipo de painel_
+        num_paineis : Array com o número de cada painel necessário
 
     """
-    preco_painel_1 = 0
-    preco_painel_2 = 0
-    preco_painel_3 = 0
-    preco_painel_4 = 0
+    precos = []
 
     # Multiplica o preço unitário x qntd de painéis para calcular
     # custo total para cada caso
-    for indice_paniel in range(len(PAINEIS_SOLARES)):
-        if   indice_paniel == 0:
-            preco_painel_1 = p1 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
-            precos.append(preco_painel_1)
-        elif indice_paniel == 1:    
-            preco_painel_2 = p2 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
-            precos.append(preco_painel_2)
-        elif indice_paniel == 2:    
-            preco_painel_3 = p3 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
-            precos.append(preco_painel_3)
-        elif indice_paniel == 3:    
-            preco_painel_4 = p4 * PAINEIS_SOLARES[indice_paniel][PRECO_UNITARIO]
-            precos.append(preco_painel_4)
+    for painel in range(len(PAINEIS_SOLARES)):
+        preco_painel = num_paineis[painel] * PAINEIS_SOLARES[painel][PRECO_UNITARIO]
+        precos.append(preco_painel)
 
     # Seleciona o mais barato
     preco_selecionado = min(precos)
 
     # Retorna o índice correspondente ao painel solar escolhido
-    return precos.index(preco_selecionado)
+    return precos.index(preco_selecionado), precos
 
 def salvar_em_json(dados, caminho_arquivo):
     """ Salvando dados obtivos
@@ -213,12 +181,9 @@ def main():
     
     Potencia = calculo_potencia(media_mensal)
 
-    qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4 = get_numero_de_paineis(Potencia)
+    quantidade_paineis = get_numero_de_paineis(Potencia)
 
-    # Salvar em uma lista para facilitar visualização
-    quantidade_paineis = np.array([qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4])
-
-    painel_final = decidir_painel(qtd_painel1, qtd_painel2, qtd_painel3, qtd_painel4)
+    painel_final, precos = decidir_painel(quantidade_paineis)
 
     potencia_final = quantidade_paineis[painel_final] * PAINEIS_SOLARES[painel_final, POTENCIA]
 
