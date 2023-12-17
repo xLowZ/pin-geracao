@@ -27,7 +27,7 @@ python App.py
 - Por enquanto, para algum aproveitamento do mesmo, aqui vão algumas instruções:
     - Link para descobrir o [HSP](http://www.cresesb.cepel.br/index.php?section=sundata) (Irradiação solar diária média anual).
     - Entrar com o valor de HSP em `param.json` com o número encontrado.
-- Verificar o padrão de alimentação para denominar a tarifa (em param.json):
+- Verificar o padrão de alimentação para denominar a tarifa (em `param.json`):
     - De acordo com Resolução ANEEL RESOLUÇÃO NORMATIVA ANEEL Nº 1.000:    
     Art. 291. O custo de disponibilidade do sistema elétrico é o valor em moeda corrente equivalente a:     
     I - 30 kWh, se monofásico ou bifásico a dois condutores;       
