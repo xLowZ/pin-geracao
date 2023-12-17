@@ -152,8 +152,8 @@ def main():
     V_max_pot_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'tensao_max_pot'].values[0]
 
     # Inversor
-    V_max_inversor = dataInversor['MAX_tensao_entrada[Vcc]'].iloc[0] # SUS (conferir valores)
-    V_min_inversor = dataInversor['MIN_tensao_entrada[Vcc]'].iloc[0] # SUS (conferir valores)
+    V_max_inversor = dataInversor['MAX_tensao_entrada[Vcc]'].iloc[0] 
+    V_min_inversor = dataInversor['MIN_tensao_entrada[Vcc]'].iloc[0] 
     I_max_inversor = dataInversor['corrente_max[A]'].iloc[0]
     Pot_max_inversor = dataInversor['potencia_nominal_saida[W]'].iloc[0]
 
