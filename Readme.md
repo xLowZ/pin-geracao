@@ -23,7 +23,7 @@ python App.py
 
 ### Observação:
 - O programa é simples e não leva em consideração, por exemplo, a área disponível para o cálculo do nº de painéis e não puxa os dados de incidência solar automaticamente, pois foi pensado para o caso em questão (em relação ao preço).
-- Dados do inversor desejado também terão de ser colocados manualmente para teste (em `inversor.csv`).
+- Dados do inversor desejado também devem ser colocados manualmente para teste (em `inversor.csv`).
 - Por enquanto, para algum aproveitamento do mesmo, aqui vão algumas instruções:
     - Link para descobrir o [HSP](http://www.cresesb.cepel.br/index.php?section=sundata) (Irradiação solar diária média anual).
     - Entrar com o valor de HSP em `param.json` com o número encontrado.
