@@ -6,92 +6,81 @@
 import pandas as pd
 import os
 import json
+import logging
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# =========================== Configurações =================================
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-# Obtém o caminho absoluto para o diretório do script
-script_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Constrói o caminho absoluto para o arquivo CSV
-conta_luz_csv = os.path.join(script_dir, '..', 'data', 'conta_luz.csv')
-
-# Pegando os dados do arquivo conta_luz.csv
-data = pd.read_csv(conta_luz_csv)
-
-# ============================= Constantes ==================================
-
-DIAS_MES = 30
-NUM_MESES_ANO = 12
+# Configuração do logger
+log_path = os.path.abspath("logs/analise_consumo.log")
+logging.basicConfig(filename=log_path, level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-def get_media():
+def get_dados():
+    """Retorna o caminho relativo para os arquivos contendo as informações de
+    conta de luz e de configurações
     """
-        Média mensal:
-        Somatório de todo o consumo
-        dividido pelo número total de meses em 1 ano 
-    """
-    return round(((data["Consumo[kWh]"].sum()) / NUM_MESES_ANO), 2)
+
+    m_dir = os.path.dirname(os.path.abspath(__file__))
+    cl_dir = os.path.join(m_dir, '..', 'data', 'conta_luz.csv')
+    js_dir = os.path.join(m_dir, '..', 'config', 'param.json')
+
+    return cl_dir, js_dir
+
+def get_media(data):
+    """Calcula a média mensal de consumo."""
+    try:
+        return data['Consumo[kWh]'].mean()
+    except KeyError:
+        logger.error("Coluna 'Consumo[kWh]' não encontrada nos dados.")
+        return None
 
 def get_consumo_diario_medio(media):
-    """
-    Cálculo do consumo diário médio 
-    baseado na média de consumo obtida
-
-    Args:
-        media (flot): media mensal obtida
-    """
-
-    # Consumo Diário Médio = cdm
-    return round((media / DIAS_MES), 2)
+    """Calcula o consumo diário médio."""
+    if media is not None:
+        DIAS_MES = 30
+        return round(media / DIAS_MES, 2)
+    return None
 
 def salvar_em_json(dados, caminho_arquivo):
-    """ Salvando dados obtivos
-
-    Args:
-        dados (dictionary): dicionário contendo o conteúdo a ser salvo
-        caminho_arquivo (None): caminho para o arquivo
-    """
-    # Leitura do arquivo JSON atual
+    """Salva os dados em um arquivo JSON."""
     try:
         with open(caminho_arquivo, 'r') as arquivo:
             conteudo_atual = json.load(arquivo)
     except FileNotFoundError:
-        # Se o arquivo não existir, crie um dicionário vazio
         conteudo_atual = {}
 
-    # Atualização do dicionário com os novos dados
     conteudo_atual.update(dados)
 
-    # Escrita do dicionário atualizado de volta no arquivo JSON
     with open(caminho_arquivo, 'w') as arquivo:
         json.dump(conteudo_atual, arquivo, indent=2)
 
 def main():
-    
-    media_mensal = get_media()
-    consumo_diario_medio = get_consumo_diario_medio(media_mensal)
+    conta_luz_csv, caminho_arquivo_json = get_dados()
 
-    # Dicionário para organizar os dados
-    dados_consumo = {
-        "media_mensal": media_mensal, 
-        "consumo_diario_medio": consumo_diario_medio
-    }
+    try:
+        data = pd.read_csv(conta_luz_csv)
 
-    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-    # Salvar os dados em um arquivo JSON
-    salvar_em_json({"Dados_Consumo_Bruto": dados_consumo}, caminho_arquivo_json)
+        media_mensal = get_media(data)
+        consumo_diario_medio = get_consumo_diario_medio(media_mensal)
 
-    # Exibir resultados ou realizar outras ações (opcional)
-    print(f"Média Mensal: {media_mensal}kWh")
-    print(f"Consumo Diário Médio: {consumo_diario_medio}kWh")
+        dados_consumo = {
+            "media_mensal": media_mensal,
+            "consumo_diario_medio": consumo_diario_medio
+        }
+
+        salvar_em_json({"Dados_Consumo_Bruto": dados_consumo}, caminho_arquivo_json)
+
+        logger.info(f"Média Mensal: {media_mensal} kWh")
+        logger.info(f"Consumo Diário Médio: {consumo_diario_medio} kWh")
+        print(f"Média Mensal: {media_mensal}kWh")
+        print(f"Consumo Diário Médio: {consumo_diario_medio}kWh")
+    except Exception as e:
+        logger.exception("Ocorreu um erro durante a execução do programa.")
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# =========================== Início da Execução ============================
+# =========================== Início do Módulo ==============================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 if __name__ == "__main__":
