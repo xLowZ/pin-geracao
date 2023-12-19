@@ -21,8 +21,10 @@ def get_dados():
     cl_dir = os.path.join(m_dir, '..', 'data', 'conta_luz.csv')
     js_dir = os.path.join(m_dir, '..', 'config', 'param.json')
 
-    log_path = os.path.join(m_dir, '..', 'logs', 'analise_consumo.log')
-    logging.basicConfig(filename=log_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    log_path = os.path.join(m_dir, '..', 'logs', 'registros.log')
+    logging.basicConfig(filename=log_path, level=logging.INFO, 
+                        format='%(asctime)s - %(levelname)s - %(module)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
     logger = logging.getLogger(__name__)
 
     return cl_dir, js_dir, logger
