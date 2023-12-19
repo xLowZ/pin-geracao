@@ -8,11 +8,6 @@ import os
 import json
 import logging
 
-# Configuração do logger
-log_path = os.path.abspath("logs/analise_consumo.log")
-logging.basicConfig(filename=log_path, level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -22,13 +17,17 @@ def get_dados():
     conta de luz e de configurações
     """
 
-    m_dir = os.path.dirname(os.path.abspath(__file__))
+    m_dir  = os.path.dirname(os.path.abspath(__file__))
     cl_dir = os.path.join(m_dir, '..', 'data', 'conta_luz.csv')
     js_dir = os.path.join(m_dir, '..', 'config', 'param.json')
 
-    return cl_dir, js_dir
+    log_path = os.path.join(m_dir, '..', 'logs', 'analise_consumo.log')
+    logging.basicConfig(filename=log_path, level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
-def get_media(data):
+    return cl_dir, js_dir, logger
+
+def get_media(data, logger):
     """Calcula a média mensal de consumo."""
     try:
         return data['Consumo[kWh]'].mean()
@@ -57,12 +56,12 @@ def salvar_em_json(dados, caminho_arquivo):
         json.dump(conteudo_atual, arquivo, indent=2)
 
 def main():
-    conta_luz_csv, caminho_arquivo_json = get_dados()
+    conta_luz_csv, caminho_arquivo_json, logger = get_dados()
 
     try:
         data = pd.read_csv(conta_luz_csv)
 
-        media_mensal = get_media(data)
+        media_mensal = get_media(data, logger)
         consumo_diario_medio = get_consumo_diario_medio(media_mensal)
 
         dados_consumo = {
