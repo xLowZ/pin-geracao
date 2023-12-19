@@ -22,28 +22,32 @@ def get_dados():
     js_dir = os.path.join(m_dir, '..', 'config', 'param.json')
 
     log_path = os.path.join(m_dir, '..', 'logs', 'analise_consumo.log')
-    logging.basicConfig(filename=log_path, level=logging.INFO)
+    logging.basicConfig(filename=log_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     logger = logging.getLogger(__name__)
 
     return cl_dir, js_dir, logger
 
 def get_media(data, logger):
     """Calcula a média mensal de consumo."""
+
     try:
-        return data['Consumo[kWh]'].mean()
+        return data['Consumo[kWh]'].mean()   
     except KeyError:
         logger.error("Coluna 'Consumo[kWh]' não encontrada nos dados.")
         return None
 
 def get_consumo_diario_medio(media):
     """Calcula o consumo diário médio."""
+
     if media is not None:
         DIAS_MES = 30
         return round(media / DIAS_MES, 2)
+    
     return None
 
 def salvar_em_json(dados, caminho_arquivo):
     """Salva os dados em um arquivo JSON."""
+
     try:
         with open(caminho_arquivo, 'r') as arquivo:
             conteudo_atual = json.load(arquivo)
