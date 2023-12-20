@@ -25,15 +25,11 @@ df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
 
 # ============== Enums pra evitar numeros mágicos  =====================
 
-POTENCIA, PRECO_UNITARIO = range(2)
+POTENCIA, PRECO_UNITARIO, MODELO = range(3)
 DIAS_MES = 30
-NUM_MESES_ANO = 12
 
-# Criar matriz com a potência e preço por unidade de cada painel
-PAINEIS_SOLARES = df[['potencia[kW]', 'preco']].to_numpy()
-
-# Criar a array NOMES_PAINEIS com o nome dos paineis
-NOMES_PAINEIS = df['modelo'].to_list()
+# Criar matriz com a potência, preço por unidade e modelo de cada painel
+PAINEIS_SOLARES = df[['potencia[kW]', 'preco', 'modelo']].to_numpy()
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
@@ -189,7 +185,7 @@ def main():
 
     # Dicionário para organizar os dados
     dados_solar = {
-        "painel_selecionado": NOMES_PAINEIS[painel_final], 
+        "painel_selecionado": PAINEIS_SOLARES[painel_final][MODELO], 
         "qtd_paineis_necessarios": int(quantidade_paineis[painel_final]),
         "capacidade_total": round(potencia_final, 2),
         "preco_instalacao": precos[painel_final],
@@ -200,7 +196,7 @@ def main():
     # Salvar os dados em um arquivo JSON
     salvar_em_json({"Dados_Solar": dados_solar}, caminho_arquivo_json)
 
-    print(f'Painel Selecionado: {NOMES_PAINEIS[painel_final]}')
+    print(f'Painel Selecionado: {PAINEIS_SOLARES[painel_final][MODELO]}')
     print(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
     print(f'Capacidade ao instalar: {potencia_final:.3f}kW')
     print(f'Preço final: R${precos[painel_final]}')
