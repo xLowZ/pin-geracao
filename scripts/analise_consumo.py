@@ -83,7 +83,9 @@ def main():
         print(f"Consumo Diário Médio: {consumo_diario_medio}kWh")
     except Exception as e:
         logger.exception("Ocorreu um erro durante a execução do programa.")
-
+    finally:
+        logging.shutdown()
+    
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Início do Módulo ==============================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
