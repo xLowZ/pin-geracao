@@ -7,6 +7,7 @@ import os
 import json
 import pandas as pd
 from math import floor
+import logging
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Configurações =================================
@@ -31,6 +32,15 @@ DATA_PAINEIS = pd.read_csv(PAINEIS_CSV)
 
 def get_caminho_json():
     return os.path.join(SCRIPT_DIR, '..', 'config', 'param.json')
+
+def log_config():
+    log_path = os.path.join(SCRIPT_DIR, '..', 'logs', 'registros.log')
+    logging.basicConfig(filename=log_path, level=logging.INFO, 
+                        format='%(asctime)s - %(levelname)s - %(module)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+    logger = logging.getLogger(__name__)
+
+    return logger
 
 def get_painel_selecionado_e_capacidade(caminho_arquivo_json):
     with open(caminho_arquivo_json, 'r') as file:
@@ -162,6 +172,8 @@ def main():
     # V_min_mppt = DATA_INVERSOR['min_MPPT[Vcc]'].iloc[0]
     # V_max_mppt = DATA_INVERSOR['max_MPPT[Vcc]'].iloc[0]
     
+    logger = log_config()
+
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     # ========================= Execução dos Cálculos ===========================
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -176,14 +188,18 @@ def main():
 
     if flag_tensao and flag_corrente: #and flag_MPPT:
         print('Tudo dentro dos conformes, \033[32minstalação possível\033[0m')
+        logger.info('Tudo dentro dos conformes, instalação possível')
         instalacao = 'Possível'
     else:
         instalacao = 'Revisar'
         if not flag_tensao and not flag_corrente:
+            logger.warning('AVISO:\nFora da faixa de tensão e corrente do inversor')
             print('\033[33mAVISO\033[0m:\nFora da faixa de tensão e corrente do inversor')
         elif not flag_corrente:
+            logger.warning('AVISO:\nFora da faixa de corrente do inversor')
             print('\033[33mAVISO\033[0m:\nFora da faixa de corrente do inversor')
         else:
+            logger.warning('AVISO:\nFora da faixa de tensão do inversor')   
             print('\033[33mAVISO\033[0m:\nFora da faixa de tensão do inversor')   
 
     # Dicionário para organizar os dados
