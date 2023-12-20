@@ -7,6 +7,7 @@ from math import ceil
 import numpy as np
 import pandas as pd
 import json
+import logging
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Configurações =================================
@@ -32,6 +33,15 @@ PAINEIS_SOLARES = DATA_PAINEIS[['potencia[kW]', 'preco', 'modelo']].to_numpy()
 
 def get_caminho_json():
     return os.path.join(SCRIPT_DIR, '..', 'config', 'param.json')
+
+def log_config():
+    log_path = os.path.join(SCRIPT_DIR, '..', 'logs', 'registros.log')
+    logging.basicConfig(filename=log_path, level=logging.INFO, 
+                        format='%(asctime)s - %(levelname)s - %(module)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+    logger = logging.getLogger(__name__)
+
+    return logger
 
 def get_dados_consumo(js_dir):
     """ Pega os dados obtidos de analise_consumo
@@ -172,6 +182,8 @@ def salvar_em_json(dados, caminho_arquivo):
         json.dump(conteudo_atual, arquivo, indent=2)
 
 def main():
+    logger = log_config()
+
     js_dir = get_caminho_json()
 
     media_mensal = get_dados_consumo(js_dir)
@@ -196,10 +208,16 @@ def main():
     # Salvar os dados em um arquivo JSON
     salvar_em_json({"Dados_Solar": dados_solar}, js_dir)
 
+    logger.info(f'Painel Selecionado: {PAINEIS_SOLARES[painel_final][MODELO]}')
+    logger.info(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
+    logger.info(f'Capacidade ao instalar: {potencia_final:.3f}kW')
+    logger.info(f'Preço final: R${precos[painel_final]}')
     print(f'Painel Selecionado: {PAINEIS_SOLARES[painel_final][MODELO]}')
     print(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
     print(f'Capacidade ao instalar: {potencia_final:.3f}kW')
     print(f'Preço final: R${precos[painel_final]}')
+
+    logging.shutdown()
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =========================== Início da Execução ============================
