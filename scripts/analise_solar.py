@@ -13,37 +13,35 @@ import json
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 # Obtém o caminho absoluto para o diretório do script
-script_dir = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Potência e preço por unidade dos painéis (kW e R$)
-# Df = DataFrame
-df = pd.read_csv(os.path.join(script_dir, '..', 'data', 'paineis.csv'))
+DATA_PAINEIS = pd.read_csv(os.path.join(SCRIPT_DIR, '..', 'data', 'paineis.csv'))
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# ================== Variáveis Globais e Constantes =========================
+# =================== Variáveis Globais e Constantes ========================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-# ============== Enums pra evitar numeros mágicos  =====================
 
 POTENCIA, PRECO_UNITARIO, MODELO = range(3)
-DIAS_MES = 30
 
 # Criar matriz com a potência, preço por unidade e modelo de cada painel
-PAINEIS_SOLARES = df[['potencia[kW]', 'preco', 'modelo']].to_numpy()
+PAINEIS_SOLARES = DATA_PAINEIS[['potencia[kW]', 'preco', 'modelo']].to_numpy()
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-def get_dados_consumo():
+def get_caminho_json():
+    return os.path.join(SCRIPT_DIR, '..', 'config', 'param.json')
+
+def get_dados_consumo(js_dir):
     """ Pega os dados obtidos de analise_consumo
         através de param.json
 
     Returns:
         float: retorna os valores calculados anteriormente
     """
-    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-    with open(caminho_arquivo_json, 'r') as file:
+
+    with open(js_dir, 'r') as file:
         config = json.load(file)
 
     # Acessar os dados de consumo
@@ -64,6 +62,8 @@ def novos_dados(media_m, config):
         Trifásico: a taxa mínima é igual a 100 kWh.
     """
 
+    DIAS_MES = 30
+
     # Qualquer erro de digitação na configuração resultará
     # em uma análise trifásica
     # Obter o valor de "padrao_alimentacao" do JSON
@@ -81,7 +81,7 @@ def novos_dados(media_m, config):
 
     return round(novo_cdm, 2)
 
-def calculo_potencia(media):
+def calculo_potencia(media, js_dir):
     """Cálculo da potência mínima do microgerador
     (ou do Inversor)
 
@@ -97,8 +97,7 @@ def calculo_potencia(media):
         cdm (float): consumo diário médio obtido
     """
 
-    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
-    with open(caminho_arquivo_json, 'r') as file:
+    with open(js_dir, 'r') as file:
         config = json.load(file)
 
     HSP = float(config.get('HSP'))
@@ -111,7 +110,7 @@ def calculo_potencia(media):
     return Pm 
 
 def get_numero_de_paineis(Ps):
-    """Cálculo do número de paneis necessários
+    """Cálculo do número de paneis necessários p/ modelo
        para atingir a demanda
 
     Args:
@@ -173,9 +172,11 @@ def salvar_em_json(dados, caminho_arquivo):
         json.dump(conteudo_atual, arquivo, indent=2)
 
 def main():
-    media_mensal = get_dados_consumo()
+    js_dir = get_caminho_json()
+
+    media_mensal = get_dados_consumo(js_dir)
     
-    Potencia = calculo_potencia(media_mensal)
+    Potencia = calculo_potencia(media_mensal, js_dir)
 
     quantidade_paineis = get_numero_de_paineis(Potencia)
 
@@ -192,9 +193,8 @@ def main():
         "demanda": round(Potencia, 4)
     }
 
-    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
     # Salvar os dados em um arquivo JSON
-    salvar_em_json({"Dados_Solar": dados_solar}, caminho_arquivo_json)
+    salvar_em_json({"Dados_Solar": dados_solar}, js_dir)
 
     print(f'Painel Selecionado: {PAINEIS_SOLARES[painel_final][MODELO]}')
     print(f'Quantidade de painéis necessários: {quantidade_paineis[painel_final]}')
