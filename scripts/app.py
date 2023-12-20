@@ -1,3 +1,16 @@
+import subprocess
+import sys
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# ============================ CONFIGURAÇÃO =================================
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+COMMAND = ['python', 'app.py'] if sys.platform == 'win32' else ['python3', 'app.py']
+
+subprocess.Popen(COMMAND, creationflags=subprocess.CREATE_NO_WINDOW)
+
+################################################################
+
 # Importando os módulos
 import analise_consumo
 import analise_solar
@@ -19,7 +32,6 @@ def executar_todos_os_modulos():
     inversor.main()
 
     interface.criar_interface()
-
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ============================ Inicialização ================================
