@@ -33,7 +33,7 @@ NUM_MESES_ANO = 12
 PAINEIS_SOLARES = df[['potencia[kW]', 'preco']].to_numpy()
 
 # Criar a array NOMES_PAINEIS com o nome dos paineis
-NOMES_PAINEIS = df['nome'].to_list()
+NOMES_PAINEIS = df['modelo'].to_list()
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================

@@ -147,9 +147,9 @@ def main():
     caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
     painel_selecionado, capacidade_sistema = get_painel_selecionado_e_capacidade()
 
-    Voc_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'tensao_em_aberto'].values[0]
-    Isc_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'corrente_cc'].values[0]
-    V_max_pot_painel = dataPaineis.loc[dataPaineis['nome'] == painel_selecionado, 'tensao_max_pot'].values[0]
+    Voc_painel = dataPaineis.loc[dataPaineis['modelo'] == painel_selecionado, 'tensao_em_aberto'].values[0]
+    Isc_painel = dataPaineis.loc[dataPaineis['modelo'] == painel_selecionado, 'corrente_cc'].values[0]
+    V_max_pot_painel = dataPaineis.loc[dataPaineis['modelo'] == painel_selecionado, 'tensao_max_pot'].values[0]
 
     # Inversor
     V_max_inversor = dataInversor['MAX_tensao_entrada[Vcc]'].iloc[0] 
