@@ -13,21 +13,24 @@ from math import floor
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 # Obtém o caminho absoluto para o diretório do script
-script_dir = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Constrói o caminho absoluto para o arquivo CSV
-inversor_csv = os.path.join(script_dir, '..', 'data', 'inversor.csv')
+INVERSOR_CSV = os.path.join(SCRIPT_DIR, '..', 'data', 'inversor.csv')
 
 # Constrói o caminho absoluto para o arquivo CSV
-paineis_csv = os.path.join(script_dir, '..', 'data', 'paineis.csv')
+PAINEIS_CSV = os.path.join(SCRIPT_DIR, '..', 'data', 'paineis.csv')
 
 # Pegando os dados dos arquivos
-dataInversor = pd.read_csv(inversor_csv)
-dataPaineis = pd.read_csv(paineis_csv)
+DATA_INVERSOR = pd.read_csv(INVERSOR_CSV)
+DATA_PAINEIS = pd.read_csv(PAINEIS_CSV)
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # =============================== Funções ===================================
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+def get_caminho_json():
+    return os.path.join(SCRIPT_DIR, '..', 'config', 'param.json')
 
 def get_painel_selecionado_e_capacidade(caminho_arquivo_json):
     with open(caminho_arquivo_json, 'r') as file:
@@ -143,21 +146,21 @@ def main():
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
     # Painel
-    caminho_arquivo_json = os.path.join(script_dir, '..', 'config', 'param.json')
+    caminho_arquivo_json = get_caminho_json()
     painel_selecionado, capacidade_sistema = get_painel_selecionado_e_capacidade(caminho_arquivo_json)
 
-    Voc_painel = dataPaineis.loc[dataPaineis['modelo'] == painel_selecionado, 'tensao_em_aberto'].values[0]
-    Isc_painel = dataPaineis.loc[dataPaineis['modelo'] == painel_selecionado, 'corrente_cc'].values[0]
-    V_max_pot_painel = dataPaineis.loc[dataPaineis['modelo'] == painel_selecionado, 'tensao_max_pot'].values[0]
+    Voc_painel = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'tensao_em_aberto'].values[0]
+    Isc_painel = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'corrente_cc'].values[0]
+    V_max_pot_painel = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'tensao_max_pot'].values[0]
 
     # Inversor
-    V_max_inversor = dataInversor['MAX_tensao_entrada[Vcc]'].iloc[0] 
-    V_min_inversor = dataInversor['MIN_tensao_entrada[Vcc]'].iloc[0] 
-    I_max_inversor = dataInversor['corrente_max[A]'].iloc[0]
-    Pot_max_inversor = dataInversor['potencia_nominal_saida[W]'].iloc[0]
+    V_max_inversor = DATA_INVERSOR['MAX_tensao_entrada[Vcc]'].iloc[0] 
+    V_min_inversor = DATA_INVERSOR['MIN_tensao_entrada[Vcc]'].iloc[0] 
+    I_max_inversor = DATA_INVERSOR['corrente_max[A]'].iloc[0]
+    Pot_max_inversor = DATA_INVERSOR['potencia_nominal_saida[W]'].iloc[0]
 
-    # V_min_mppt = dataInversor['min_MPPT[Vcc]'].iloc[0]
-    # V_max_mppt = dataInversor['max_MPPT[Vcc]'].iloc[0]
+    # V_min_mppt = DATA_INVERSOR['min_MPPT[Vcc]'].iloc[0]
+    # V_max_mppt = DATA_INVERSOR['max_MPPT[Vcc]'].iloc[0]
     
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     # ========================= Execução dos Cálculos ===========================
