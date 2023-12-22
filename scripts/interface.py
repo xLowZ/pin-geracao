@@ -8,15 +8,9 @@ import json
 
 
 # Obtém o diretório do script atual
-script_dir = os.path.dirname(os.path.abspath(__file__)) 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+ASSETS_PATH = os.path.join(script_dir, 'assets', 'frame0')
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\igork\Desktop\code\pin-geracao\assets\frame0")
-#ASSETS_PATH = os.path.join(script_dir,'..', 'scripts', 'assets', 'frame0') 
-
-
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
 
 # Função que cria a interface gráfica
 def criar_interface():
@@ -46,7 +40,7 @@ def criar_interface():
             anchor="nw",
             text=resultado0_str,
             fill="#000000",
-            font=("Montserrat Medium", 12 * -1)
+            font=("Montserrat SemiBold", 12 * -1)
         )
         button_2.config(state=tk.DISABLED)
 
@@ -107,7 +101,7 @@ def criar_interface():
 
     # Função que mostra as informações sobre o aplicativo
     def mostrar_sobre():
-        sobre = "Proteus Analyzer™ v1.0\n\nEste aplicativo criado pelo grupo Proteus, ajuda a simplificar a análise e cálculos relacionados à instalação de geração distribuída fotovoltaica residencial.\n\n\nGostaria de acessar o nosso repositório no GitHub?"
+        sobre = "Proteus Analyzer™ v1.3.2\n\nEste aplicativo criado pelo grupo Proteus, ajuda a simplificar a análise e cálculos relacionados à instalação de geração distribuída fotovoltaica residencial.\n\n\nGostaria de acessar o nosso repositório no GitHub?"
         resposta = messagebox.askyesno("Sobre", sobre)  # Exibe a mensagem com um botão de confirmação
         if resposta:
             webbrowser.open_new_tab("https://github.com/xLowZ/pin-geracao") 
@@ -116,7 +110,9 @@ def criar_interface():
     window = Tk()
 
     window.geometry("700x450+620+270")
+    window.title("Proteus Solar Analyzer")
     window.configure(bg = "#FFFFFF")
+    window.iconbitmap("assets/frame0/icon.ico")
 
 
     canvas = Canvas(
@@ -147,7 +143,7 @@ def criar_interface():
         outline="")
 
     image_image_1 = PhotoImage(
-        file=relative_to_assets("image_1.png"))
+        file="assets/frame0/image_1.png")
     image_1 = canvas.create_image(
         349.0,
         297.0,
@@ -164,7 +160,7 @@ def criar_interface():
     )
 
     image_image_2 = PhotoImage(
-        file=relative_to_assets("image_2.png"))
+        file="assets/frame0/image_2.png")
     image_2 = canvas.create_image(
         183.0,
         131.0,
@@ -181,7 +177,7 @@ def criar_interface():
     )
 
     image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
+        file="assets/frame0/image_3.png")
     image_3 = canvas.create_image(
         515.0,
         131.0,
@@ -198,7 +194,7 @@ def criar_interface():
     )
 
     image_image_4 = PhotoImage(
-        file=relative_to_assets("image_4.png"))
+        file="assets/frame0/image_4.png")
     image_4 = canvas.create_image(
         550.0,
         29.0,
@@ -253,7 +249,7 @@ def criar_interface():
     
 
     button_image_1 = PhotoImage(
-        file=relative_to_assets("button_1.png"))
+        file="assets/frame0/button_1.png")
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
@@ -277,7 +273,7 @@ def criar_interface():
         outline="")
 
     button_image_2 = PhotoImage(
-        file=relative_to_assets("button_2.png"))
+        file="assets/frame0/button_2.png")
     button_2 = Button(
         image=button_image_2,
         borderwidth=0,
@@ -293,7 +289,7 @@ def criar_interface():
     )
 
     button_image_3 = PhotoImage(
-        file=relative_to_assets("button_3.png"))
+        file="assets/frame0/button_3.png")
     button_3 = Button(
         image=button_image_3,
         borderwidth=0,
