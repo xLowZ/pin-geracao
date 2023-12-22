@@ -112,7 +112,7 @@ def criar_interface():
     window.geometry("700x450+620+270")
     window.title("Proteus Solar Analyzer")
     window.configure(bg = "#FFFFFF")
-    window.iconbitmap("assets/frame0/icon.ico")
+    window.iconbitmap("assets/frame0/icon_1.ico")
 
 
     canvas = Canvas(
