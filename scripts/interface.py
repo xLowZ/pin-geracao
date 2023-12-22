@@ -11,8 +11,8 @@ import json
 script_dir = os.path.dirname(os.path.abspath(__file__)) 
 
 OUTPUT_PATH = Path(__file__).parent
-#ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\igork\Desktop\UI solar\build\assets\frame0")
-ASSETS_PATH = os.path.join(script_dir,'..', 'scripts', 'assets', 'frame0')
+ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\igork\Desktop\code\pin-geracao\assets\frame0")
+#ASSETS_PATH = os.path.join(script_dir,'..', 'scripts', 'assets', 'frame0') 
 
 
 def relative_to_assets(path: str) -> Path:
