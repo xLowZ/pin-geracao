@@ -2,12 +2,22 @@ import os
 import webbrowser
 import tkinter as tk
 from tkinter import messagebox
-import ttkbootstrap as tb
+from pathlib import Path
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 # from ttkbootstrap.constants import *
 import json
 
+
 # Obtém o diretório do script atual
 script_dir = os.path.dirname(os.path.abspath(__file__)) 
+
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\igork\Desktop\UI solar\build\assets\frame0")
+
+
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
+
 
 
 # Função que mostra os resultados da análise dos painéis solares
@@ -84,31 +94,218 @@ def mostrar_sobre():
         webbrowser.open_new_tab("https://github.com/xLowZ/pin-geracao") 
 
 # Função que cria a interface gráfica
-def criar_interface():
-    root = tb.Window(themename="darkly")
-    root.title("Proteus Analyzer")
-    root.geometry('500x400')
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
 
-    titulo = tb.Label(text="Proteus Analyzer", font=("Bahnschrift", 28), bootstyle="warning")
-    titulo.pack(pady=30)
 
-    # Botões para acionar as diferentes análises
-    button_analisar0 = tb.Button(text="Consumo", bootstyle="success, outline", command=consumo_resultados)
-    button_analisar0.pack(pady=20, padx=50)
+window = Tk()
 
-    button_analisar1 = tb.Button(text="Realizar Análise das Placas", bootstyle="success, outline", command=solar_resultados)
-    button_analisar1.pack(pady=20, padx=50)
+window.geometry("700x450")
+window.configure(bg = "#FFFFFF")
 
-    button_analisar2 = tb.Button(text="Realizar Análise do Inversor", bootstyle="success, outline", command=inversor_resultados)
-    button_analisar2.pack(pady=20, padx=50)
 
-    # Botão "Sobre" no canto inferior direito da janela
-    button_sobre = tb.Button(text="Sobre", bootstyle="info", command=mostrar_sobre)
-    button_sobre.pack(side=tk.RIGHT, anchor=tk.SE, padx=10, pady=10)
-    
-    # Inicia o loop principal da interface gráfica
-    root.mainloop()
+canvas = Canvas(
+    window,
+    bg = "#FFFFFF",
+    height = 450,
+    width = 700,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
+)
 
-if __name__ == "__main__":
-    criar_interface() # Chama a função para criar a interface ao iniciar o programa
+canvas.place(x = 0, y = 0)
+canvas.create_rectangle(
+    0.0,
+    0.0,
+    700.0,
+    59.0,
+    fill="#000000",
+    outline="")
 
+canvas.create_rectangle(
+    10.0,
+    64.0,
+    688.0,
+    176.0,
+    fill="#6DC934",
+    outline="")
+
+image_image_1 = PhotoImage(
+    file=relative_to_assets("image_1.png"))
+image_1 = canvas.create_image(
+    349.0,
+    297.0,
+    image=image_image_1
+)
+
+canvas.create_text(
+    106.0,
+    9.0,
+    anchor="nw",
+    text="Proteus Solar Analyzer",
+    fill="#FFB400",
+    font=("Montserrat Black", 32 * -1)
+)
+
+image_image_2 = PhotoImage(
+    file=relative_to_assets("image_2.png"))
+image_2 = canvas.create_image(
+    183.0,
+    131.0,
+    image=image_image_2
+)
+
+canvas.create_text(
+    40.0,
+    104.0,
+    anchor="nw",
+    text="Média Mesal",
+    fill="#000000",
+    font=("Montserrat Bold", 12 * -1)
+)
+
+canvas.create_text(
+    37.0,
+    126.0,
+    anchor="nw",
+    text="253,75 kWh",
+    fill="#000000",
+    font=("Montserrat Bold", 24 * -1)
+)
+
+image_image_3 = PhotoImage(
+    file=relative_to_assets("image_3.png"))
+image_3 = canvas.create_image(
+    515.0,
+    131.0,
+    image=image_image_3
+)
+
+canvas.create_text(
+    372.0,
+    104.0,
+    anchor="nw",
+    text="Consumo Diário",
+    fill="#000000",
+    font=("Montserrat Bold", 12 * -1)
+)
+
+canvas.create_text(
+    369.0,
+    126.0,
+    anchor="nw",
+    text="8,16 kWh",
+    fill="#000000",
+    font=("Montserrat Bold", 24 * -1)
+)
+
+image_image_4 = PhotoImage(
+    file=relative_to_assets("image_4.png"))
+image_4 = canvas.create_image(
+    567.0,
+    29.0,
+    image=image_image_4
+)
+
+canvas.create_text(
+    26.0,
+    69.0,
+    anchor="nw",
+    text="Consumo",
+    fill="#000000",
+    font=("Montserrat Medium", 24 * -1)
+)
+
+canvas.create_text(
+    77.0,
+    202.0,
+    anchor="nw",
+    text="Analise Solar",
+    fill="#000000",
+    font=("Montserrat Medium", 24 * -1)
+)
+
+canvas.create_rectangle(
+    297.0,
+    202.0,
+    673.0,
+    393.0,
+    fill="#FFFFFF",
+    outline="")
+
+canvas.create_text(
+    304.0,
+    205.0,
+    anchor="nw",
+    text="Painel Selecionado: \nQuantidade de painéis necessários: \nCapacidade ao instalar: \nPreço final: \n\n\n\n\n\n",
+    fill="#000000",
+    font=("Montserrat Medium", 10 * -1)
+)
+
+canvas.create_text(
+    304.0,
+    289.0,
+    anchor="nw",
+    text="Máximo de Painéis em Série: \nMáximo de Painéis em Paralelo:\nFator de Dimensionamento:\nMáxima Tensão de Entrada: \nMáxima Corrente de Entrada: \nStatus da Instalação:",
+    fill="#000000",
+    font=("Montserrat SemiBold", 10 * -1)
+)
+
+button_image_1 = PhotoImage(
+    file=relative_to_assets("button_1.png"))
+button_1 = Button(
+    image=button_image_1,
+    borderwidth=0,
+    highlightthickness=0,
+    command=mostrar_sobre,
+    relief="flat"
+)
+button_1.place(
+    x=646.0,
+    y=423.0,
+    width=52.0,
+    height=25.0
+)
+
+canvas.create_rectangle(
+    371.0,
+    280.0,
+    597.0,
+    281.0492192230013,
+    fill="#2196F3",
+    outline="")
+
+button_image_2 = PhotoImage(
+    file=relative_to_assets("button_2.png"))
+button_2 = Button(
+    image=button_image_2,
+    borderwidth=0,
+    highlightthickness=0,
+    command=solar_resultados,
+    relief="flat"
+)
+button_2.place(
+    x=94.0,
+    y=262.0,
+    width=127.0,
+    height=44.0
+)
+
+button_image_3 = PhotoImage(
+    file=relative_to_assets("button_3.png"))
+button_3 = Button(
+    image=button_image_3,
+    borderwidth=0,
+    highlightthickness=0,
+    command=inversor_resultados,
+    relief="flat"
+)
+button_3.place(
+    x=94.0,
+    y=321.0,
+    width=127.0,
+    height=44.0
+)
+window.resizable(False, False)
+window.mainloop()
