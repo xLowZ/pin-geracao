@@ -101,8 +101,13 @@ def criar_interface():
 
     # Função que mostra as informações sobre o aplicativo
     def mostrar_sobre():
-        sobre = "Proteus Analyzer™ v1.3.2\n\nEste aplicativo criado pelo grupo Proteus, ajuda a simplificar a análise e cálculos relacionados à instalação de geração distribuída fotovoltaica residencial.\n\n\nGostaria de acessar o nosso repositório no GitHub?"
-        resposta = messagebox.askyesno("Sobre", sobre)  # Exibe a mensagem com um botão de confirmação
+        sobre = "Proteus Analyzer™ v1.3.2\n\nEste aplicativo criado pelo grupo Proteus, ajuda a simplificar a análise e cálculos relacionados à instalação de geração distribuída fotovoltaica residencial."
+        messagebox.showinfo("Sobre", sobre)
+
+    # Função que abre o repositório no GitHub
+    def abrir_repositorio():
+        repositorio = "Gostaria de acessar o nosso repositório no GitHub?"
+        resposta = messagebox.askyesno("GitHub", repositorio)  # Exibe a mensagem com um botão de confirmação
         if resposta:
             webbrowser.open_new_tab("https://github.com/xLowZ/pin-geracao") 
 
@@ -303,5 +308,22 @@ def criar_interface():
         width=127.0,
         height=44.0
     )
+
+    button_image_4 = PhotoImage(
+        file="assets/frame0/button_4.png")
+    button_4 = Button(
+        image=button_image_4,
+        borderwidth=0,
+        highlightthickness=0,
+        command=abrir_repositorio,
+        relief="flat"
+    )
+    button_4.place(
+        x=0.0,
+        y=411.0,
+        width=40.0,
+        height=40.0
+    )
+
     window.resizable(False, False)
     window.mainloop()
