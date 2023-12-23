@@ -9,7 +9,7 @@ import json
 
 # Obtém o diretório do script atual
 script_dir = os.path.dirname(os.path.abspath(__file__))
-ASSETS_PATH = os.path.join(script_dir, 'assets', 'frame0')
+ASSETS_PATH = os.path.join(script_dir,'..', 'assets', 'frame0')
 
 
 # Função que cria a interface gráfica
@@ -110,6 +110,17 @@ def criar_interface():
         resposta = messagebox.askyesno("GitHub", repositorio)  # Exibe a mensagem com um botão de confirmação
         if resposta:
             webbrowser.open_new_tab("https://github.com/xLowZ/pin-geracao") 
+    
+    #*****PROVISORIO*****
+    button_1_path = os.path.join(ASSETS_PATH, 'button_1.png')
+    button_2_path = os.path.join(ASSETS_PATH, 'button_2.png')
+    button_3_path = os.path.join(ASSETS_PATH, 'button_3.png')
+    button_4_path = os.path.join(ASSETS_PATH, 'button_4.png')
+    icon_1_path = os.path.join(ASSETS_PATH, 'icon_1.ico')
+    image_1_path = os.path.join(ASSETS_PATH, 'image_1.png')
+    image_2_path = os.path.join(ASSETS_PATH, 'image_2.png')
+    image_3_path = os.path.join(ASSETS_PATH, 'image_3.png')
+    image_4_path = os.path.join(ASSETS_PATH, 'image_4.png')
 
 
     window = Tk()
@@ -117,8 +128,7 @@ def criar_interface():
     window.geometry("700x450+620+270")
     window.title("Proteus Solar Analyzer")
     window.configure(bg = "#FFFFFF")
-    window.iconbitmap("assets/frame0/icon_1.ico")
-
+    window.iconbitmap(icon_1_path)
 
     canvas = Canvas(
         window,
@@ -148,7 +158,7 @@ def criar_interface():
         outline="")
 
     image_image_1 = PhotoImage(
-        file="assets/frame0/image_1.png")
+        file=image_1_path)
     image_1 = canvas.create_image(
         349.0,
         297.0,
@@ -165,7 +175,7 @@ def criar_interface():
     )
 
     image_image_2 = PhotoImage(
-        file="assets/frame0/image_2.png")
+        file=image_2_path)
     image_2 = canvas.create_image(
         183.0,
         131.0,
@@ -182,7 +192,7 @@ def criar_interface():
     )
 
     image_image_3 = PhotoImage(
-        file="assets/frame0/image_3.png")
+        file=image_3_path)
     image_3 = canvas.create_image(
         515.0,
         131.0,
@@ -199,7 +209,7 @@ def criar_interface():
     )
 
     image_image_4 = PhotoImage(
-        file="assets/frame0/image_4.png")
+        file=image_4_path)
     image_4 = canvas.create_image(
         550.0,
         29.0,
@@ -254,7 +264,7 @@ def criar_interface():
     
 
     button_image_1 = PhotoImage(
-        file="assets/frame0/button_1.png")
+        file=button_1_path)
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
@@ -278,7 +288,7 @@ def criar_interface():
         outline="")
 
     button_image_2 = PhotoImage(
-        file="assets/frame0/button_2.png")
+        file=button_2_path)
     button_2 = Button(
         image=button_image_2,
         borderwidth=0,
@@ -294,7 +304,7 @@ def criar_interface():
     )
 
     button_image_3 = PhotoImage(
-        file="assets/frame0/button_3.png")
+        file=button_3_path)
     button_3 = Button(
         image=button_image_3,
         borderwidth=0,
@@ -310,7 +320,7 @@ def criar_interface():
     )
 
     button_image_4 = PhotoImage(
-        file="assets/frame0/button_4.png")
+        file=button_4_path)
     button_4 = Button(
         image=button_image_4,
         borderwidth=0,
