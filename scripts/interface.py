@@ -116,9 +116,9 @@ def criar_interface():
     window.geometry("700x450+620+270")
     window.title("Proteus Solar Analyzer")
     window.configure(bg = "#FFFFFF")
-    window.iconbitmap("assets/frame0/icon_1.ico")
+    window.iconbitmap(os.path.join(script_dir, '..', 'assets', 'frame0', 'icon_1.ico'))
+     
     
-
     canvas = Canvas(
         window,
         bg = "#FFFFFF",
@@ -147,7 +147,7 @@ def criar_interface():
         outline="")
 
     image_image_1 = PhotoImage(
-        file="assets/frame0/image_1.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', 'image_1.png'))
     image_1 = canvas.create_image(
         349.0,
         297.0,
@@ -164,7 +164,7 @@ def criar_interface():
     )
 
     image_image_2 = PhotoImage(
-        file="assets/frame0/image_2.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', 'image_2.png'))
     image_2 = canvas.create_image(
         183.0,
         131.0,
@@ -181,7 +181,7 @@ def criar_interface():
     )
 
     image_image_3 = PhotoImage(
-        file="assets/frame0/image_3.png")
+    file = os.path.join(script_dir, '..', 'assets', 'frame0', 'image_3.png'))
     image_3 = canvas.create_image(
         515.0,
         131.0,
@@ -198,7 +198,7 @@ def criar_interface():
     )
 
     image_image_4 = PhotoImage(
-        file="assets/frame0/image_4.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', 'image_4.png'))
     image_4 = canvas.create_image(
         550.0,
         29.0,
@@ -253,7 +253,7 @@ def criar_interface():
     
 
     button_image_1 = PhotoImage(
-        file="assets/frame0/button_1.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', 'button_1.png'))
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
@@ -277,7 +277,7 @@ def criar_interface():
         outline="")
 
     button_image_2 = PhotoImage(
-        file="assets/frame0/button_2.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', 'button_2.png'))
     button_2 = Button(
         image=button_image_2,
         borderwidth=0,
@@ -293,7 +293,7 @@ def criar_interface():
     )
 
     button_image_3 = PhotoImage(
-        file="assets/frame0/button_3.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', 'button_3.png'))
     button_3 = Button(
         image=button_image_3,
         borderwidth=0,
@@ -309,7 +309,7 @@ def criar_interface():
     )
 
     button_image_4 = PhotoImage(
-        file="assets/frame0/button_4.png")
+        file = os.path.join(script_dir, '..', 'assets', 'frame0', "button_4.png"))
     button_4 = Button(
         image=button_image_4,
         borderwidth=0,
