@@ -149,30 +149,42 @@ def salvar_em_json(dados, caminho_arquivo):
     with open(caminho_arquivo, 'w') as arquivo:
         json.dump(conteudo_atual, arquivo, indent=2)
 
+def get_painel_info(json_dir):
+    """Define variáveis com os dados do painel selecionado
+    """
+    painel_selecionado, capacidade_sistema = get_painel_selecionado_e_capacidade(json_dir)
+
+    Voc = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'tensao_em_aberto'].values[0]
+    Isc = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'corrente_cc'].values[0]
+    V_max_pot = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'tensao_max_pot'].values[0]
+
+    return Voc, Isc, V_max_pot, capacidade_sistema
+
+def get_inversor_info():
+    """Define variáveis com os dados do inversor
+    """
+    V_max   = DATA_INVERSOR['MAX_tensao_entrada[Vcc]'].iloc[0] 
+    V_min   = DATA_INVERSOR['MIN_tensao_entrada[Vcc]'].iloc[0] 
+    I_max   = DATA_INVERSOR['corrente_max[A]'].iloc[0]
+    Pot_max = DATA_INVERSOR['potencia_nominal_saida[W]'].iloc[0]
+
+    # V_min_mppt = DATA_INVERSOR['min_MPPT[Vcc]'].iloc[0]
+    # V_max_mppt = DATA_INVERSOR['max_MPPT[Vcc]'].iloc[0]
+
+    return V_max, V_min, I_max, Pot_max
+
 def main():
 
     logger = log_config()
+    caminho_arquivo_json = get_caminho_json()
 
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     # ============================== Variáveis ==================================
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-    # Painel
-    caminho_arquivo_json = get_caminho_json()
-    painel_selecionado, capacidade_sistema = get_painel_selecionado_e_capacidade(caminho_arquivo_json)
-
-    Voc_painel = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'tensao_em_aberto'].values[0]
-    Isc_painel = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'corrente_cc'].values[0]
-    V_max_pot_painel = DATA_PAINEIS.loc[DATA_PAINEIS['modelo'] == painel_selecionado, 'tensao_max_pot'].values[0]
-
-    # Inversor
-    V_max_inversor = DATA_INVERSOR['MAX_tensao_entrada[Vcc]'].iloc[0] 
-    V_min_inversor = DATA_INVERSOR['MIN_tensao_entrada[Vcc]'].iloc[0] 
-    I_max_inversor = DATA_INVERSOR['corrente_max[A]'].iloc[0]
-    Pot_max_inversor = DATA_INVERSOR['potencia_nominal_saida[W]'].iloc[0]
-
-    # V_min_mppt = DATA_INVERSOR['min_MPPT[Vcc]'].iloc[0]
-    # V_max_mppt = DATA_INVERSOR['max_MPPT[Vcc]'].iloc[0]
+    Voc_painel, Isc_painel, V_max_pot_painel, capacidade_sistema = get_painel_info(caminho_arquivo_json)
+    
+    V_max_inversor, V_min_inversor, I_max_inversor, Pot_max_inversor =  get_inversor_info() 
     
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     # ========================= Execução dos Cálculos ===========================
@@ -186,7 +198,7 @@ def main():
 
     # flag_MPPT = verif_tensao_MPPT(tensao_entrada, V_min_mppt, V_max_mppt)
 
-    if flag_tensao and flag_corrente: #and flag_MPPT:
+    if flag_tensao and flag_corrente: # and flag_MPPT:
         print('Tudo dentro dos conformes, \033[32minstalação possível\033[0m')
         logger.info('Tudo dentro dos conformes, instalação possível')
         instalacao = 'Possível'
