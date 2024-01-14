@@ -16,7 +16,9 @@ No terminal, certifique-se de estar no mesmo diretório do arquivo `requirements
 pip install -r requirements.txt
 ```
 ### Inicialização
-Após a conclusão da instalação das dependências, ajuste manualmente os arquivos `conta_luz.csv` e `param.json` com os dados de conta de luz, padrão de entrada e irradiação solar diária média anual respectivamente. Por último, no terminal, certifique-se de estar no mesmo diretório do aplicativo (scripts/) e inicie o programa com o seguinte comando:
+Após a conclusão da instalação das dependências, ajuste manualmente os arquivos `conta_luz.csv` e `param.json` com os dados de conta de luz, padrão de entrada e irradiação solar diária média anual respectivamente. 
+
+Por último, no terminal, certifique-se de estar no mesmo diretório do aplicativo (src/) e inicie o programa com o seguinte comando:
 ```bash
 python app.pyw
 ```
