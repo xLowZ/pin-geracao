@@ -3,6 +3,12 @@
 ## Sobre o Projeto
 - O Grupo Proteus apresenta um programa projetado para simplificar a análise e cálculos relacionados à instalação de geração distribuída fotovoltaica residencial para esse caso específico. Esta ferramenta visa facilitar o processo de tomada de decisões para aqueles interessados em adotar sistemas de energia solar em suas residências.
 
+## ProTεuS:
+
+- [@xLowZ](https://github.com/xLowZ)
+- [@Ravenz23](https://github.com/Ravenz23)
+- [@Mattheug](https://github.com/Mattheug)
+
 ## Como usar
 
 ### Pré-requisitos
